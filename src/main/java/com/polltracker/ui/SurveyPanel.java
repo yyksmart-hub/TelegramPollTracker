@@ -170,13 +170,12 @@ public class SurveyPanel extends JPanel {
     }
 
     private void showToastNotification() {
-        String message = "🚀 הסקר החל ונשלח בהצלחה לכל חברי הקהילה!";
         JWindow toast = new JWindow(SwingUtilities.getWindowAncestor(this));
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createLineBorder(new Color(34, 139, 34), 2));
         panel.setBackground(new Color(224, 255, 224));
 
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
+        JLabel label = new JLabel(AppConstants.MSG_SURVEY_STARTED, SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 14));
         label.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         label.setForeground(new Color(0, 100, 0));

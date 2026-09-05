@@ -14,9 +14,12 @@ public final class AppConstants {
     public static final int MAX_OPTIONS_PER_QUESTION = 4;
 
     // קהילה
-    public static final int MIN_MEMBERS_FOR_SURVEY = 3;
+    public static final int MIN_MEMBERS_FOR_SURVEY = 1;
 
     public static final String VOTE_CALLBACK_PREFIX = "VOTE:";
-    public static final String REMINDER_MESSAGE ="⏰ תזכורת: נותרו עוד 2 דקות לסיום הסקר! אנא השלם את מענה השאלות.";
-    public static final String FINISH_MESSAGE="תודה! השלמת את מענה כל השאלות בסקר. 🙌";
+
+    // הודעות מערכת (Messages)
+    public static final String MSG_SURVEY_STARTED = "🚀 הסקר החל ונשלח בהצלחה לכל חברי הקהילה!";
+    public static final String MSG_REMINDER ="⏰ תזכורת: נותרו עוד 2 דקות לסיום הסקר! אנא השלם את מענה השאלות.";
+    public static final String MSG_FINISH ="תודה! השלמת את מענה כל השאלות בסקר. 🙌";
 }

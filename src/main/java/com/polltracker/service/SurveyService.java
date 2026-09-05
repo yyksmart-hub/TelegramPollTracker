@@ -137,7 +137,7 @@ public class SurveyService {
 
         for (Map.Entry<Long, ParticipantProgress> entry : survey.getParticipantsProgress().entrySet()) {
             if (!entry.getValue().isCompleted()) {
-                botHandler.sendMessage(entry.getKey(), AppConstants.REMINDER_MESSAGE);
+                botHandler.sendMessage(entry.getKey(), AppConstants.MSG_REMINDER);
             }
         }
     }
@@ -173,7 +173,7 @@ public class SurveyService {
             Question nextQuestion = survey.getQuestions().get(nextIndex);
             botHandler.sendQuestionToUser(telegramId, surveyId, nextQuestion);
         } else {
-            botHandler.sendMessage(telegramId, AppConstants.FINISH_MESSAGE);
+            botHandler.sendMessage(telegramId, AppConstants.MSG_FINISH);
         }
 
         checkAndCloseIfAllCompleted(survey);
