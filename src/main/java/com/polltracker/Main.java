@@ -2,7 +2,7 @@ package com.polltracker;
 
 import com.polltracker.bot.TelegramBotHandler;
 import com.polltracker.service.CommunityService;
-import com.polltracker.service.GeminiService;
+import com.polltracker.service.AiSurveyService;
 import com.polltracker.service.SurveyService;
 import com.polltracker.ui.MainFrame;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -16,7 +16,7 @@ public class Main {
         // 1. אתחול השירותים
         CommunityService communityService = new CommunityService();
         SurveyService surveyService = new SurveyService(communityService);
-        GeminiService geminiService = new GeminiService();
+        AiSurveyService aiSurveyService = new AiSurveyService();
 
         // 2. יצירת הבוט וקישור השירותים
         TelegramBotHandler botHandler = new TelegramBotHandler(communityService);
@@ -35,7 +35,7 @@ public class Main {
 
         // 4. העלאת ממשק ה-Swing (ב-Event Dispatch Thread)
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(communityService, surveyService, geminiService);
+            MainFrame mainFrame = new MainFrame(communityService, surveyService, aiSurveyService);
             mainFrame.setVisible(true);
             System.out.println("🖥️ ממשק הניהול ב-Swing הופעל בהצלחה!");
         });

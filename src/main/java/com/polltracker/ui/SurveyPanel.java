@@ -1,7 +1,7 @@
 package com.polltracker.ui;
 
 import com.polltracker.model.*;
-import com.polltracker.service.GeminiService;
+import com.polltracker.service.AiSurveyService;
 import com.polltracker.service.SurveyService;
 import com.polltracker.util.AppConstants;
 import com.polltracker.util.DateFormatter;
@@ -24,7 +24,7 @@ public class SurveyPanel extends JPanel {
     private static final int TOAST_NOTIFICATION_MS = 3000;
 
     private final SurveyService surveyService;
-    private final GeminiService geminiService;
+    private final AiSurveyService geminiService;
 
     // רכיבי ניטור סקר פעיל
     private final JLabel activeSurveyStatusLabel = new JLabel("אין סקר פעיל כעת", SwingConstants.CENTER);
@@ -38,7 +38,7 @@ public class SurveyPanel extends JPanel {
     // טבלת היסטוריית סקרים
     private final DefaultTableModel historyTableModel;
 
-    public SurveyPanel(SurveyService surveyService, GeminiService geminiService) {
+    public SurveyPanel(SurveyService surveyService, AiSurveyService geminiService) {
         this.surveyService = surveyService;
         this.geminiService = geminiService;
 
