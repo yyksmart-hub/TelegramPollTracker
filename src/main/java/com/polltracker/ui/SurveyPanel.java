@@ -24,7 +24,7 @@ public class SurveyPanel extends JPanel {
     private static final int TOAST_NOTIFICATION_MS = 3000;
 
     private final SurveyService surveyService;
-    private final AiSurveyService geminiService;
+    private final AiSurveyService aiSurveyService;
 
     // רכיבי ניטור סקר פעיל
     private final JLabel activeSurveyStatusLabel = new JLabel("אין סקר פעיל כעת", SwingConstants.CENTER);
@@ -38,9 +38,9 @@ public class SurveyPanel extends JPanel {
     // טבלת היסטוריית סקרים
     private final DefaultTableModel historyTableModel;
 
-    public SurveyPanel(SurveyService surveyService, AiSurveyService geminiService) {
+    public SurveyPanel(SurveyService surveyService, AiSurveyService aiSurveyService) {
         this.surveyService = surveyService;
-        this.geminiService = geminiService;
+        this.aiSurveyService = aiSurveyService;
 
         // 1. אתחול מודלי הטבלאות (חובה בבנאי כי הם final)
         this.activeTableModel = new DefaultTableModel(new String[]{"שם משתתף", "התקדמות", "סטטוס"}, 0);
@@ -54,11 +54,11 @@ public class SurveyPanel extends JPanel {
         JTextField topicField = new JTextField(12);
         JSpinner countSpinner = new JSpinner(new SpinnerNumberModel(AppConstants.MIN_QUESTIONS, AppConstants.MIN_QUESTIONS, AppConstants.MAX_QUESTIONS, 1));
         ((JSpinner.DefaultEditor) countSpinner.getEditor()).getTextField().setEditable(false);
-        JButton geminiBtn = new JButton("צור סקר עם Gemini");
+        JButton aiBtn = new JButton("צור סקר עם AI");
         JButton manualBtn = new JButton("צור סקר ידני");
 
         // 4. הרכבת תתי-הפאנלים
-        JPanel formPanel = buildFormPanel(topicField, countSpinner, geminiBtn, manualBtn);
+        JPanel formPanel = buildFormPanel(topicField, countSpinner, aiBtn, manualBtn);
         JPanel activePanel = buildActivePanel();
         JPanel historyPanel = buildHistoryPanel();
 
@@ -66,13 +66,13 @@ public class SurveyPanel extends JPanel {
         setupMainLayout(formPanel, activePanel, historyPanel);
 
         // 6. הפעלת מאזינים וטיימרים
-        setupEventsAndObservers(geminiBtn, manualBtn, topicField, countSpinner);
+        setupEventsAndObservers(aiBtn, manualBtn, topicField, countSpinner);
     }
 
-    private JPanel buildFormPanel(JTextField topicField, JSpinner countSpinner, JButton geminiBtn, JButton manualBtn) {
+    private JPanel buildFormPanel(JTextField topicField, JSpinner countSpinner, JButton aiBtn, JButton manualBtn) {
         JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         formPanel.add(manualBtn);
-        formPanel.add(geminiBtn);
+        formPanel.add(aiBtn);
         formPanel.add(new JLabel("כמות שאלות (" + AppConstants.MIN_QUESTIONS + "-" + AppConstants.MAX_QUESTIONS + "):"));
         formPanel.add(countSpinner);
         formPanel.add(new JLabel("נושא הסקר:"));
@@ -124,9 +124,9 @@ public class SurveyPanel extends JPanel {
         add(mainContainer, BorderLayout.CENTER);
     }
 
-    private void setupEventsAndObservers(JButton geminiBtn, JButton manualBtn, JTextField topicField, JSpinner countSpinner) {
+    private void setupEventsAndObservers(JButton aiBtn, JButton manualBtn, JTextField topicField, JSpinner countSpinner) {
         // אירועי כפתורים
-        geminiBtn.addActionListener(e -> createGeminiSurvey(topicField, countSpinner, geminiBtn));
+        aiBtn.addActionListener(e -> createAiSurvey(topicField, countSpinner, aiBtn));
         manualBtn.addActionListener(e -> createManualSurvey(topicField, countSpinner));
         viewResultsBtn.addActionListener(e -> showResultsDialog());
 
@@ -199,7 +199,7 @@ public class SurveyPanel extends JPanel {
         timer.start();
     }
 
-    private void createGeminiSurvey(JTextField topicField, JSpinner countSpinner, JButton geminiBtn) {
+    private void createAiSurvey(JTextField topicField, JSpinner countSpinner, JButton aiBtn) {
         String topic = topicField.getText().trim();
         int count = (int) countSpinner.getValue();
 
@@ -208,10 +208,10 @@ public class SurveyPanel extends JPanel {
             return;
         }
 
-        geminiBtn.setEnabled(false);
+        aiBtn.setEnabled(false);
         new Thread(() -> {
             try {
-                List<Question> questions = this.geminiService.generateQuestions(topic, count);
+                List<Question> questions = this.aiSurveyService.generateQuestions(topic, count);
                 StringBuilder preview = new StringBuilder("השאלות שנוצרו:\n\n");
                 for (Question q : questions) {
                     preview.append("Q: ").append(q.getText()).append("\n");
@@ -222,17 +222,17 @@ public class SurveyPanel extends JPanel {
                 preview.append("\nאישור ותזמון הסקר למועד שנבחר?");
 
                 SwingUtilities.invokeLater(() -> {
-                    int confirm = JOptionPane.showConfirmDialog(this, preview.toString(), "אישור סקר Gemini", JOptionPane.YES_NO_OPTION);
+                    int confirm = JOptionPane.showConfirmDialog(this, preview.toString(), "אישור סקר AI", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
                         // קריאה לפונקציית העזר המשותפת
                         finalizeAndScheduleSurvey(topic, questions, topicField);
                     }
-                    geminiBtn.setEnabled(true);
+                    aiBtn.setEnabled(true);
                 });
             } catch (Exception ex) {
                 SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(this, "שגיאה מ-Gemini: " + ex.getMessage());
-                    geminiBtn.setEnabled(true);
+                    JOptionPane.showMessageDialog(this, "שגיאה מ-AI: " + ex.getMessage());
+                    aiBtn.setEnabled(true);
                 });
             }
         }).start();
