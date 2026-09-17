@@ -14,7 +14,7 @@ public final class AppConstants {
     public static final int MAX_OPTIONS_PER_QUESTION = 4;
 
     // קהילה
-    public static final int MIN_MEMBERS_FOR_SURVEY = 1;
+    public static final int MIN_MEMBERS_FOR_SURVEY = 3;
 
     public static final String VOTE_CALLBACK_PREFIX = "VOTE:";
 
